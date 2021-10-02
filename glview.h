@@ -4,7 +4,9 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFramebufferObject>
 #include <QColorDialog>
+#include <QOpenGLFunctions>
 #include <QTimer>
+
 #include <QTime>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLDebugLogger>
@@ -19,16 +21,15 @@
 
 #define PAINT_FBO_WIDTH 2048
 
-class GLView : public QOpenGLWidget
+class GLView : public QOpenGLWidget,protected QOpenGLFunctions
 {
     Q_OBJECT
 
 public:
     explicit GLView(QWidget *parent = 0);
 
+
     void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
     void drawScene();
     void drawOutlinedText(QPainter* painter, int x, int y, QString text, QColor bgColor, QColor fgColor);
     void drawBrush();
@@ -56,6 +57,8 @@ public slots:
     void onMeshesRemoved(QList<Mesh*> removed);
     void onMeshesAltered(QList<Mesh*> altered);
 protected:
+    void resizeGL(int w, int h);
+    void paintGL();
     // shared GL resources
     QOpenGLFramebufferObject* drawFbo();
     QOpenGLFramebufferObject* transferFbo();
